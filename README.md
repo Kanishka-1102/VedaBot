@@ -10,6 +10,15 @@ Integration with FAISS: Efficient vector-based retrieval for precise and relevan
 Customizable Prompt: Tailored prompt to ensure user-friendly and accurate advice.
 Source Referencing: Provides references for responses to ensure transparency.
 
+install python 3 in your system
+and then setup environment first 
+
+virtual Environmnet
+python -m venv venv
+source venv/bin/activate   # for Linux/Mac
+venv\Scripts\activate      # for Windows
+
+
 steps to  run it in your local device
 1. git clone https://github.com/Kanishka-1102/Chatbot
    
@@ -17,13 +26,10 @@ steps to  run it in your local device
 
 3.Set up env file having HUGGINGFACEHUB_ACCESS_TOKEN="xyz"
 
+
+
 Usage 🚀
 Run the bot:
-
-chainlit run main.py
-
-Or for good GUI 
-
 Streamlit run app.py
 
 
