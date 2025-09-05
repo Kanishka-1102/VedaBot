@@ -85,7 +85,7 @@ def main():
         st.title("Vedabot")
         st.markdown("Your Ayurvedic Chatbot Assistant :herb:")
         st.image("https://t4.ftcdn.net/jpg/07/22/93/81/360_F_722938112_xunuELGTYPe4cb2JNKQRddTaghih3nfj.jpg", 
-                use_container_width=True)
+                width="stretch")
         
         # Display instructions in the sidebar
         st.info("""**Instructions:**
