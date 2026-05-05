@@ -1,4 +1,25 @@
+/* ===== GOOGLE FONT ===== */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
 
+/* ===== GLOBAL — Black, Bold, Bigger ===== */
+html, body, [class*="css"] {
+    font-family: 'Lato', sans-serif !important;
+    font-size: 18px !important;
+    color: #000000 !important; /* Pure Black */
+}
+
+p, label, div, span, li {
+    font-size: 18px !important;
+    color: #000000 !important;
+    font-weight: 700 !important; /* Bold */
+    text-shadow: 0px 0px 1px rgba(255,255,255,0.5); /* Subtle lift for dark backgrounds */
+}
+
+h1 { font-size: 2.4rem !important; font-weight: 900 !important; color: #111 !important; }
+h2 { font-size: 1.9rem !important; font-weight: 800 !important; color: #1B3022 !important; }
+h3 { font-size: 1.5rem !important; font-weight: 800 !important; color: #1B3022 !important; }
+
+/* ===== BACKGROUND ===== */
 .stApp {
     background-image: url("https://t4.ftcdn.net/jpg/05/78/45/21/360_F_578452196_2szXN92U1RtPLGUvuFB4QiNQlQWtlMKq.jpg");
     background-repeat: no-repeat;
@@ -7,168 +28,157 @@
     background-attachment: fixed;
 }
 
-/* Glassmorphism Container for the whole page content */
+/* 🌿 10-Shade Muted Sage Gradient - Softer, Desaturated Pastel Green */
 .block-container {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 2rem !important;
+    background: linear-gradient(
+        to bottom,
+        rgba(248, 249, 244, 0.98) 0%,    /* 1. Off-white Sage */
+        rgba(238, 241, 230, 0.97) 10%,   /* 2. Soft Parchment */
+        rgba(224, 230, 212, 0.96) 20%,   /* 3. Pale Tea */
+        rgba(209, 219, 194, 0.96) 35%,   /* 4. Muted Pistachio */
+        rgba(194, 208, 176, 0.95) 50%,   /* 5. Light Sage */
+        rgba(178, 196, 158, 0.95) 65%,   /* 6. Dusty Leaf */
+        rgba(163, 185, 140, 0.94) 80%,   /* 7. Antique Jade */
+        rgba(145, 171, 119, 0.94) 90%,   /* 8. Willow Green */
+        rgba(119, 146, 91, 0.93) 95%,    /* 9. Muted Moss */
+        rgba(85, 107, 47, 0.95) 100%     /* 10. Dark Olive */
+    ) !important;
+    backdrop-filter: blur(12px) !important;
+    border-radius: 25px;
+    padding: 3.5rem !important;
     margin-top: 2rem !important;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
 }
 
+/* ===== HEADER ===== */
 .main-header {
-    background: rgba(46, 125, 50, 0.1);
-    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: rgba(255,255,255,0.85);
+    padding: 1.2rem 2rem;
     border-radius: 15px;
     margin-bottom: 2rem;
-    border-left: 5px solid #2E7D32;
+    border-bottom: 4px solid #C5A059; /* Gold accent */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
 .title-container h1 {
-    color: #1b3022;
-    font-size: 3.5rem;
-    font-weight: 800;
+    color: #1B3022 !important;
+    font-size: 2.2rem !important;
+    font-weight: 900;
     margin: 0;
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
 }
 
 .title-container h2 {
-    color: #2E7D32;
-    font-size: 2rem;
-    font-weight: 600;
-    margin: 0.5rem 0;
+    color: #856B2F !important; /* Muted Gold */
+    font-size: 1.1rem !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0;
 }
 
 .title-container p {
-    color: #444;
-    font-size: 1.2rem;
-    font-weight: 400;
+    color: #444 !important;
+    font-size: 1rem !important;
+    margin-top: 4px;
 }
 
 .circular-logo {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
+    width: 75px !important;
+    height: 75px !important;
+    border-radius: 12px;
     object-fit: cover;
-    border: 4px solid white;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-
+/* ===== INPUT ===== */
 .stTextInput > div > div {
     background-color: white !important;
-    border-radius: 12px;
-    border: 2px solid #2E7D32 !important;
-    padding: 0.5rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    border: 1.5px solid #856B2F !important; /* Gold border */
 }
 
 .stTextInput input {
-    color: #1b3022 !important;
+    font-size: 18px !important;
+    color: #111 !important;
+    font-weight: 600 !important;
 }
 
-/* Alert Styling Overrides for better contrast */
-.stAlert {
-    background-color: white !important;
-    color: #1b3022 !important;
-    border: 1px solid #ddd !important;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
-}
-
-.stButton > button {
-    background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
-    color: white !important;
+.stTextInput label {
+    font-size: 18px !important;
+    color: #111 !important;
     font-weight: 700 !important;
-    border-radius: 25px !important;
-    padding: 0.75rem 2.5rem !important;
+}
+
+/* ===== RADIO BUTTONS ===== */
+.stRadio label {
+    font-size: 18px !important;
+    color: #111 !important;
+    font-weight: 600 !important;
+}
+
+.stRadio > label {
+    font-size: 18px !important;
+    color: #111 !important;
+    font-weight: 700 !important;
+}
+
+/* ===== BUTTONS - Now Gold! ===== */
+.stButton > button {
+    background: linear-gradient(135deg, #C5A059, #856B2F) !important;
+    color: white !important;
+    border-radius: 10px !important;
+    padding: 0.7rem 2.5rem !important;
+    font-weight: 800 !important;
+    font-size: 18px !important;
     border: none !important;
-    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.4) !important;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(133, 107, 47, 0.3) !important;
+    transition: all 0.2s ease !important;
 }
 
 .stButton > button:hover {
-    background-color: #1B5E20;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(133, 107, 47, 0.4) !important;
 }
 
-/* Modified Image Grid Styles */
-.image-grid {
-    display: grid;
-    grid-gap: 1rem;
-    padding: 1rem;
-}
-
-.image-container {
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-    transition: transform 0.3s ease;
-    /* background-color: white; */
-    padding: 0.25rem;
-    margin: 10px;
-}
-
-.image-container:hover {
-    transform: scale(1.05);
-}
-
-.square-image {
-    width: 100%;
-    height: 150px;
-    border-radius: 10px;
-}
-
-.circular-image {
-    width: 100%;
-    height: 150px;
-    border-radius: 50%;
-}
-
-
+/* ===== RESPONSE CONTAINER ===== */
 .response-container {
-    background-color: #ffffff;
-    color: #1b3022;
+    background-color: rgba(255, 251, 240, 0.97);
+    color: #111;
     padding: 2rem;
     border-radius: 15px;
-    border-left: 5px solid #2E7D32;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    border-left: 6px solid #2E7D32;
     margin: 1.5rem 0;
-    line-height: 1.6;
+    font-size: 18px !important;
+    font-weight: 600;
+    line-height: 1.8;
 }
 
-.response-container h3 {
-    color: #2E7D32;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-/* Sidebar Styles */
+/* ===== SIDEBAR ===== */
 [data-testid="stSidebar"] {
-    background-color: #f8fdf9 !important;
-    border-right: 1px solid #e0e0e0;
+    background: rgba(255, 251, 240, 0.95) !important;
+    border-right: 1px solid #ddd;
 }
 
-[data-testid="stSidebar"] h1 {
-    color: #2E7D32 !important;
-    font-size: 2rem !important;
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] div {
+    color: #111 !important;
+    font-size: 17px !important;
 }
 
-/* Footer Styles */
-footer {
-    text-align: center;
-    padding: 2rem;
-    color: #0a0000;
-    background-color: white;
-    margin-top: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+/* ===== ALERTS ===== */
+.stAlert {
+    border-radius: 12px !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+}
+
+/* ===== MARKDOWN TEXT ===== */
+.stMarkdown p, .stMarkdown li {
+    color: #111 !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
 }

@@ -437,119 +437,204 @@ class DoshaAssessment:
         sorted_doshas = sorted(percentages.items(), key=lambda x: x[1], reverse=True)
         secondary_dosha = sorted_doshas[1][0] if len(sorted_doshas) > 1 else None
         
-        analysis = f"""
-        ## 🧘‍♀️ Your Ayurvedic Body Type Assessment
-        
-        ### Primary Dosha: {dosha_info['name']} ({percentages[primary_dosha]}%)
-        **Elements:** {dosha_info['elements']}  
-        **Qualities:** {dosha_info['qualities']}
-        
-        {dosha_info['description']}
-        
-        ### 📊 Your Dosha Breakdown:
-        - **{primary_dosha}:** {percentages[primary_dosha]}%
-        - **{sorted_doshas[1][0] if len(sorted_doshas) > 1 else 'N/A'}:** {sorted_doshas[1][1] if len(sorted_doshas) > 1 else 0}%
-        - **{sorted_doshas[2][0] if len(sorted_doshas) > 2 else 'N/A'}:** {sorted_doshas[2][1] if len(sorted_doshas) > 2 else 0}%
-        
-        ### 🎯 Physical Characteristics:
-        """
-        
+        analysis = f"""## 🧘‍♀️ Your Ayurvedic Body Type Assessment
+
+### Primary Dosha: {dosha_info['name']} ({percentages[primary_dosha]}%)
+**Elements:** {dosha_info['elements']}  
+**Qualities:** {dosha_info['qualities']}
+
+{dosha_info['description']}
+
+### 📊 Your Dosha Breakdown:
+- **{primary_dosha}:** {percentages[primary_dosha]}%
+- **{sorted_doshas[1][0] if len(sorted_doshas) > 1 else 'N/A'}:** {sorted_doshas[1][1] if len(sorted_doshas) > 1 else 0}%
+- **{sorted_doshas[2][0] if len(sorted_doshas) > 2 else 'N/A'}:** {sorted_doshas[2][1] if len(sorted_doshas) > 2 else 0}%
+
+### 🎯 Physical Characteristics:
+"""
+
         for trait in dosha_info['physical_traits']:
             analysis += f"- {trait}\n"
-        
+
         analysis += "\n### 🧠 Mental Characteristics:\n"
         for trait in dosha_info['mental_traits']:
             analysis += f"- {trait}\n"
-        
+
         analysis += f"\n### 🍽️ Dietary Recommendations for {primary_dosha}:\n"
         for rec in dosha_info['recommendations']['diet']:
             analysis += f"- {rec}\n"
-        
+
         analysis += f"\n### 🏃‍♀️ Lifestyle Recommendations for {primary_dosha}:\n"
         for rec in dosha_info['recommendations']['lifestyle']:
             analysis += f"- {rec}\n"
-        
+
         analysis += f"\n### 🌿 Beneficial Herbs for {primary_dosha}:\n"
         for herb in dosha_info['recommendations']['herbs']:
             analysis += f"- {herb}\n"
-        
+
         if secondary_dosha and percentages[secondary_dosha] > 20:
             secondary_info = self.dosha_characteristics[secondary_dosha]
             analysis += f"\n### ⚖️ Secondary Dosha Influence: {secondary_dosha}\n"
             analysis += f"Your {secondary_dosha} influence ({percentages[secondary_dosha]}%) means you may also benefit from:\n"
             for rec in secondary_info['recommendations']['diet'][:3]:  # Top 3 recommendations
                 analysis += f"- {rec}\n"
-        
+
         analysis += f"""
-        
-        ### 💡 Key Insights:
-        - **Balance your {primary_dosha}** by following the recommendations above
-        - **Listen to your body** and adjust based on seasonal changes
-        - **Consult an Ayurvedic practitioner** for personalized guidance
-        - **Remember:** This assessment is a starting point - individual variations exist
-        
-        ---
-        **Note:** This assessment is for educational purposes. For personalized Ayurvedic guidance, consult a qualified practitioner.
-        """
+### 💡 Key Insights:
+- **Balance your {primary_dosha}** by following the recommendations above
+- **Listen to your body** and adjust based on seasonal changes
+                    "Consult an Ayurvedic practitioner** for personalized guidance
+- **Remember:** This assessment is a starting point - individual variations exist
+
+---
+**Note:** This assessment is for educational purposes. For personalized Ayurvedic guidance, consult a qualified practitioner.
+"""
         
         return analysis
     
     def run_assessment(self) -> Tuple[str, Dict[str, int]]:
         """Run the complete dosha assessment."""
-        st.markdown("## 🧘‍♀️ Discover Your Ayurvedic Body Type")
-        st.markdown("Answer these questions to discover your dominant dosha (Vata, Pitta, or Kapha) and get personalized recommendations.")
-        
+        st.markdown("""
+        <style>
+        /* Assessment global font size increase */
+        .stApp, .stApp p, .stApp label, .stApp div {
+            font-size: 17px !important;
+        }
+        .assessment-header {
+            background: linear-gradient(135deg, #1B3022 0%, #2E7D32 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .assessment-header h1 { color: #A8D5A2; font-size: 2.2rem !important; margin: 0; }
+        .assessment-header p  { color: rgba(255,255,255,0.85); font-size: 1.1rem !important; margin-top: 0.5rem; }
+        .dosha-banner {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .dosha-card {
+            flex: 1;
+            border-radius: 15px;
+            padding: 1.2rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1rem !important;
+        }
+        .dosha-vata  { background: #E3F2FD; border: 2px solid #90CAF9; color: #1565C0; }
+        .dosha-pitta { background: #FFF3E0; border: 2px solid #FFCC80; color: #E65100; }
+        .dosha-kapha { background: #E8F5E9; border: 2px solid #A5D6A7; color: #1B5E20; }
+        .category-banner {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.3rem !important;
+            font-weight: 800;
+        }
+        .stRadio label { font-size: 16px !important; }
+        .stRadio > div { gap: 0.5rem; }
+        </style>
+
+        <div class="assessment-header">
+            <h1>🧘 Discover Your Ayurvedic Body Type</h1>
+            <p>Answer these questions honestly to discover your dominant Dosha and get personalized Ayurvedic recommendations.</p>
+        </div>
+
+        <div class="dosha-banner">
+            <div class="dosha-card dosha-vata">🌪️ Vata<br><small>Air &amp; Space</small></div>
+            <div class="dosha-card dosha-pitta">🔥 Pitta<br><small>Fire &amp; Water</small></div>
+            <div class="dosha-card dosha-kapha">🌊 Kapha<br><small>Earth &amp; Water</small></div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Category: (icon, bg_color, accent_color)
+        category_meta = {
+            "Physical Build":    ("🏋️", "#EBF5FB", "#1565C0"),
+            "Skin":              ("✨", "#FFF8E1", "#F57F17"),
+            "Hair":              ("💆", "#F9F0FF", "#6A1B9A"),
+            "Eyes":              ("👁️", "#E0F7FA", "#006064"),
+            "Digestion":         ("🍽️", "#FBE9E7", "#BF360C"),
+            "Sleep":             ("😴", "#EDE7F6", "#4527A0"),
+            "Mind & Personality":("🧠", "#E8F5E9", "#1B5E20"),
+            "Energy & Activity": ("⚡", "#FFFDE7", "#F9A825"),
+            "Weather & Climate": ("🌤️", "#E1F5FE", "#01579B"),
+        }
+
         answers = {}
-        
-        # Group questions by category
         categories = {}
         for i, question in enumerate(self.questions):
             category = question['category']
             if category not in categories:
                 categories[category] = []
             categories[category].append((i, question))
-        
-        # Display questions by category
+
         for category, questions in categories.items():
-            st.markdown(f"### {category}")
-            
+            icon, bg, color = category_meta.get(category, ("📋", "#F5F5F5", "#333"))
+
+            # Full-width category section header
+            st.markdown(f"""
+            <div style="
+                background: {bg};
+                border-left: 7px solid {color};
+                padding: 1rem 1.8rem;
+                border-radius: 12px;
+                margin: 2.5rem 0 1.2rem 0;
+                display: flex;
+                align-items: center;
+                gap: 0.8rem;
+            ">
+                <span style="font-size: 2rem; line-height:1">{icon}</span>
+                <span style="font-size: 1.4rem; font-weight: 800; color: {color};">{category}</span>
+            </div>
+            """, unsafe_allow_html=True)
+
             for question_id, question in questions:
+                # Styled question card wrapper
+                st.markdown(f"""
+                <div style="
+                    border-left: 4px solid {color};
+                    background: rgba(255,255,255,0.7);
+                    padding: 0.4rem 1.2rem 0 1.2rem;
+                    border-radius: 0 10px 10px 0;
+                    margin-bottom: 0.5rem;
+                ">
+                """, unsafe_allow_html=True)
+
                 answer = st.radio(
                     question['question'],
                     options=list(question['options'].keys()),
-                    format_func=lambda x: question['options'][x],
+                    format_func=lambda x, q=question: q['options'][x],
                     key=f"question_{question_id}",
                     horizontal=False
                 )
                 answers[f"question_{question_id}"] = answer
-            
-            st.markdown("---")
-        
+                st.markdown("</div>", unsafe_allow_html=True)
+
+            st.markdown("<hr style='border: 1px solid #e0e0e0; margin: 1.5rem 0;'>", unsafe_allow_html=True)
+
+        st.markdown("<div style='height: 1rem'></div>", unsafe_allow_html=True)
         if st.button("🔮 Discover My Body Type", type="primary"):
             if len(answers) == len(self.questions):
-                # Calculate scores
                 scores = self.calculate_dosha_scores(answers)
                 primary_dosha, percentages = self.determine_primary_dosha(scores)
-                
-                # Generate analysis
                 analysis = self.get_dosha_analysis(primary_dosha, percentages)
-                
-                # Display results
                 st.markdown(analysis)
-                
-                # Save results to session state
                 st.session_state['dosha_results'] = {
                     'primary_dosha': primary_dosha,
                     'percentages': percentages,
                     'scores': scores,
                     'analysis': analysis
                 }
-                
                 return analysis, percentages
             else:
                 st.error("Please answer all questions to get your body type assessment.")
                 return None, None
-        
+
         return None, None
 
 def get_dosha_icon(dosha: str) -> str:

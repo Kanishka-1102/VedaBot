@@ -20,6 +20,18 @@ def save_chat_history(chat_history):
     with open("chat_history.json", "w", encoding="utf-8") as file:
         json.dump(chat_history, file)
 
+def load_user_profile():
+    """Load user profile (dosha results) from JSON file"""
+    if os.path.exists("user_profile.json"):
+        with open("user_profile.json", "r", encoding="utf-8") as file:
+            return json.load(file)
+    return None
+
+def save_user_profile(profile_data):
+    """Save user profile (dosha results) to JSON file"""
+    with open("user_profile.json", "w", encoding="utf-8") as file:
+        json.dump(profile_data, file)
+
 def format_response(response_data):
     """Format the response with Ayurvedic styling"""
     result = response_data.get('result', '')
@@ -66,23 +78,21 @@ def main():
     # Load chat history
     chat_history = load_chat_history()
     
-    # Initialize body type assessment
+    # Initialize body type assessment from long-term memory
+    if 'dosha_results' not in st.session_state:
+        st.session_state['dosha_results'] = load_user_profile()
+
     if 'dosha_assessment' not in st.session_state:
         st.session_state['dosha_assessment'] = DoshaAssessment()
 
     # Header section with logo and title
     st.markdown("""
     <div class="main-header">
-        <div class="header-content">
-            <div class="logo-container">
-                <img src="https://www.pngarts.com/files/12/Ayurveda-Logo-PNG-Photo.png" 
-                     class="circular-logo">
-            </div>
-            <div class="title-container">
-                <h1>Welcome to Vedabot</h1>
-                <h2>Your Home Remedies Buddy</h2>
-                <p class="explore-text">Explore health solutions based on Ayurvedic knowledge</p>
-            </div>
+        <img src="https://www.pngarts.com/files/12/Ayurveda-Logo-PNG-Photo.png" class="circular-logo">
+        <div class="title-container">
+            <h1>Welcome to Vedabot</h1>
+            <h2>Your Home Remedies Buddy</h2>
+            <p>Exploring health solutions based on Ayurvedic knowledge</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -122,11 +132,18 @@ def main():
                 clear_chat_history()
                 st.success("Chat History has been cleared.")
 
-    # Initialize session state for navigation
+    # Smart routing — if assessment is already done, go straight to chat
     if 'show_body_type_assessment' not in st.session_state:
-        st.session_state['show_body_type_assessment'] = False
+        if st.session_state.get('dosha_results') is not None:
+            # Assessment already done → open chat directly
+            st.session_state['show_body_type_assessment'] = False
+            st.session_state['show_chat_interface'] = True
+        else:
+            # No assessment yet → open assessment first
+            st.session_state['show_body_type_assessment'] = True
+            st.session_state['show_chat_interface'] = False
     if 'show_chat_interface' not in st.session_state:
-        st.session_state['show_chat_interface'] = True
+        st.session_state['show_chat_interface'] = False
 
     # Main content area
     if st.session_state['show_body_type_assessment']:
@@ -134,11 +151,13 @@ def main():
         st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
         
         # Show previous results if available
-        if 'dosha_results' in st.session_state:
+        if st.session_state.get('dosha_results') is not None:
             st.markdown("### 🎯 Your Previous Assessment Results")
             st.markdown(st.session_state['dosha_results']['analysis'])
             
             if st.button("🔄 Retake Assessment"):
+                if os.path.exists("user_profile.json"):
+                    os.remove("user_profile.json")
                 del st.session_state['dosha_results']
                 st.rerun()
         else:
@@ -147,11 +166,15 @@ def main():
             analysis, percentages = assessment.run_assessment()
             
             if analysis:
-                # Store results in session state
+                # Compute primary dosha from percentages
+                primary_dosha = max(percentages, key=percentages.get) if percentages else 'Unknown'
+                # Store results in session state and long-term memory
                 st.session_state['dosha_results'] = {
                     'analysis': analysis,
-                    'percentages': percentages
+                    'percentages': percentages,
+                    'primary_dosha': primary_dosha
                 }
+                save_user_profile(st.session_state['dosha_results'])
                 st.rerun()
     
     elif st.session_state['show_chat_interface']:
@@ -162,16 +185,23 @@ def main():
         # Chat interface column
         with col1:
             st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
-            # Check if dosha assessment is completed
-            if 'dosha_results' not in st.session_state:
-                st.warning("⚠️ **Wait!** To provide personalized Ayurvedic advice, we first need to know your body type.")
-                st.info("Please complete the **Know Your Body Type** assessment from the sidebar or click the button below.")
-                if st.button("🚀 Start Assessment Now", key="start_assessment_inline"):
+            # Check if dosha assessment is completed and not None
+            if 'dosha_results' not in st.session_state or st.session_state['dosha_results'] is None:
+                st.warning("⚠️ **Personalization Required**")
+                st.info("To provide the most accurate Ayurvedic guidance, we need to understand your body's constitution (Dosha) first.")
+                if st.button("🧘‍♂️ Discover Your Body Type", key="start_assessment_inline"):
                     st.session_state['show_body_type_assessment'] = True
                     st.session_state['show_chat_interface'] = False
                     st.rerun()
             else:
-                dosha = st.session_state['dosha_results'].get('primary_dosha', 'Unknown')
+                # Get dosha - handle both new format (primary_dosha key) and old format (derive from percentages)
+                results = st.session_state['dosha_results']
+                if results.get('primary_dosha'):
+                    dosha = results['primary_dosha']
+                elif results.get('percentages'):
+                    dosha = max(results['percentages'], key=results['percentages'].get)
+                else:
+                    dosha = 'Not specified'
                 st.success(f"✅ Body Type Identified: **{dosha}**")
                 
                 question = st.text_input(
@@ -278,23 +308,22 @@ def main():
         # Default welcome screen
         st.markdown("""
         <div style='text-align: center; margin-top: 50px;'>
-            <h2>🌿 Welcome to VedaBot</h2>
-            <p style='font-size: 18px; color: #666; margin: 20px 0;'>
-                Your comprehensive Ayurvedic health companion
-            </p>
+            <div class="main-header">
+                <h2>🌿 Welcome to VedaBot</h2>
+                <p style='font-size: 18px; color: #666; margin: 20px 0;'>
+                    Your comprehensive Ayurvedic health companion
+                </p>
+            </div>
             <div style='display: flex; justify-content: center; gap: 20px; margin: 30px 0;'>
-                <div style='text-align: center; padding: 20px; border: 2px solid #4CAF50; border-radius: 10px; background-color: #f0f8f0;'>
+                <div style='text-align: center; padding: 20px; border: 2px solid #4CAF50; border-radius: 10px; background-color: rgba(240, 248, 240, 0.8); flex: 1;'>
                     <h3>🧘‍♀️ Know Your Body Type</h3>
-                    <p>Take our comprehensive dosha assessment to discover your Ayurvedic constitution and get personalized recommendations.</p>
+                    <p>Take our comprehensive dosha assessment to discover your Ayurvedic constitution.</p>
                 </div>
-                <div style='text-align: center; padding: 20px; border: 2px solid #2196F3; border-radius: 10px; background-color: #f0f8ff;'>
+                <div style='text-align: center; padding: 20px; border: 2px solid #2196F3; border-radius: 10px; background-color: rgba(240, 248, 255, 0.8); flex: 1;'>
                     <h3>💬 Ask Health Questions</h3>
-                    <p>Get instant Ayurvedic remedies and guidance for your health concerns and problems.</p>
+                    <p>Get instant Ayurvedic remedies and guidance for your health concerns.</p>
                 </div>
             </div>
-            <p style='color: #888; font-style: italic;'>
-                Choose an option from the sidebar to get started!
-            </p>
         </div>
         """, unsafe_allow_html=True)
 
