@@ -64,9 +64,9 @@ Context (relevant Ayurvedic knowledge):
 
 User's Ayurvedic Body Type (Dosha): {body_type}
 
-User's Problem: {question}
+User's Problem: {query}
 
-Provide Ayurvedic remedies and treatments with SPECIFIC herb names, medicine names, and oil names:""",StartLine:62,TargetContent:
+Provide Ayurvedic remedies and treatments with SPECIFIC herb names, medicine names, and oil names:"""
 
 # ---- Custom LangChain-compatible LLM ---- #
 class HuggingFaceConversationalLLM(LLM):
@@ -109,7 +109,7 @@ class HuggingFaceConversationalLLM(LLM):
 
 # ---- Helper functions ---- #
 def set_custom_prompt():
-    return PromptTemplate(template=custom_prompt_template, input_variables=["context", "question", "body_type"])
+    return PromptTemplate(template=custom_prompt_template, input_variables=["context", "query", "body_type"])
 
 def load_llm(model_id: Optional[str] = None):
     """Load the Hugging Face Inference Client.
